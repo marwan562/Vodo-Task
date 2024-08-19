@@ -11,9 +11,7 @@ const MoviesPage = () => {
 
   useEffect(() => {
     dispatch(actGetMovies());
-
-    
-  }, [dispatch, status]);
+  }, [dispatch]);
 
   return (
     <Loading isLoading={status === "pending"} error={error}>
