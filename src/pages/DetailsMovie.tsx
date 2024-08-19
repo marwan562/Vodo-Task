@@ -1,13 +1,26 @@
 import { useParams } from "react-router-dom";
 import Loading from "../components/feedback/Loading";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useEffect } from "react";
+import { actGetMoviesById } from "../store/movies/moviesSlice";
 import PageNotFound from "./PageNotFound";
-import { useGetMovieByIdQuery } from "../store/apis/MoviesApi";
+// import { useGetMovieByIdQuery } from "../store/apis/MoviesApi";
 
 const DetailsMovie = () => {
+  // const { data: movie, isLoading, error } = useGetMovieByIdQuery(id);
   const { id } = useParams<{ id: string }>();
-  const { data: movie, isLoading, error } = useGetMovieByIdQuery(id);
+  const dispatch = useAppDispatch();
+  const {
+    error,
+    selectedMovie: movie,
+    status,
+  } = useAppSelector((state) => state.movies);
 
-  if (!movie && !isLoading && !error) return <PageNotFound />;
+  useEffect(() => {
+    dispatch(actGetMoviesById(id));
+  }, [dispatch, id]);
+
+  if (!movie && status === "failed" && error) return <PageNotFound />;
 
   const MovieDetailsSections = [
     { label: "Genre", value: movie?.genre.join(", ") },
@@ -21,8 +34,9 @@ const DetailsMovie = () => {
     { label: "Production", value: movie?.production },
     { label: "Website", value: movie?.website, isLink: true },
   ];
+
   return (
-    <Loading isLoading={isLoading} error={error}>
+    <Loading isLoading={status === "pending" ? true : false} error={error}>
       <div className="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
         {movie?.poster && (
           <div className="w-full md:w-1/2 lg:w-1/3">

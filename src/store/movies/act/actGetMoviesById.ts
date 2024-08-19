@@ -1,16 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-const actGetMovies = createAsyncThunk(
-  "movies/actGetMovies",
-  async (_, thunkAPI) => {
-    const { rejectWithValue ,signal} = thunkAPI;
+const actGetMoviesById = createAsyncThunk(
+  "movies/actGetMoviesById",
+  async (id: string | undefined, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
 
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/v1/movies`,
+        `${import.meta.env.VITE_BASE_URL}/api/v1/movies/${id}`,
         {
           method: "GET",
-          signal,
         }
       );
 
@@ -28,4 +27,4 @@ const actGetMovies = createAsyncThunk(
   }
 );
 
-export default actGetMovies;
+export default actGetMoviesById;

@@ -3,7 +3,7 @@ import Loading from "../components/feedback/Loading";
 import MoviesList from "../components/MoviesList";
 import HeadLine from "../components/ui/HeadLine";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { actGetMovies } from "../store/movies/moviesSlice";
+import { actGetMovies, MoviesCleanUp } from "../store/movies/moviesSlice";
 
 const MoviesPage = () => {
   const dispatch = useAppDispatch();
@@ -11,6 +11,9 @@ const MoviesPage = () => {
 
   useEffect(() => {
     dispatch(actGetMovies());
+    return () => {
+      dispatch(MoviesCleanUp());
+    };
   }, [dispatch]);
 
   return (
