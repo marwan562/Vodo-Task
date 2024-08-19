@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import Loading from "../components/feedback/Loading";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useEffect } from "react";
-import { actGetMoviesById } from "../store/movies/moviesSlice";
+import { actGetMoviesById, MoviesCleanUp } from "../store/movies/moviesSlice";
 import PageNotFound from "./PageNotFound";
 // import { useGetMovieByIdQuery } from "../store/apis/MoviesApi";
 
@@ -18,6 +18,9 @@ const DetailsMovie = () => {
 
   useEffect(() => {
     dispatch(actGetMoviesById(id));
+    return () => {
+      dispatch(MoviesCleanUp())
+    }
   }, [dispatch, id]);
 
   if (!movie && status === "failed" && error) return <PageNotFound />;
